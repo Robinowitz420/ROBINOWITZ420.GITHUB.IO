@@ -11,10 +11,16 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+      NEXT_PUBLIC_CLERK_FRONTEND_API: ${{ secrets.NEXT_PUBLIC_CLERK_FRONTEND_API }}
+      NEXT_PUBLIC_CLERK_API_VERSION: ${{ secrets.NEXT_PUBLIC_CLERK_API_VERSION }}
+      # If a server-side CI step needs it, uncomment and set CLERK_API_KEY in repository secrets
+      # CLERK_API_KEY: ${{ secrets.CLERK_API_KEY }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
@@ -22,7 +28,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build static site
         run: npm run build
